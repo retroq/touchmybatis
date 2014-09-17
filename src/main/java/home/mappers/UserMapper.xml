@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="home.mappers.UserMapper">
+    <resultMap id="UserMap" type="User" autoMapping="true">
+
+        <association property="address"
+                     column="address_id"
+
+                     resultMap="Address">
+
+                     </association>
+    </resultMap>
+
+    <resultMap id="Address" type="home.data.Address" autoMapping="true">
+
+    </resultMap>
+
+    <sql id="userColumns">('name', 'phone', 'address_id')</sql>
+
+    <select id="selectUserByName" resultType="home.data.User" resultMap="UserMap">
+        select * from User INNER JOIN address ON address.id = address_id where name = #{name}
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" parameterType="User" keyColumn="id">
+        insert into user ("NAME", "PHONE", "ADDRESS_ID")
+        VALUES (#{name}, #{phone}, #{address.id})
+        </insert>
+</mapper>
